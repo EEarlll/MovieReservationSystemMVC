@@ -1,0 +1,100 @@
+﻿@model IEnumerable<MovieReservationSystem.Models.Showtime>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="d-flex flex-row justify-content-between">
+    <h1>Showtime List</h1>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a class="btn btn-primary" asp-action="Create">Create New</a>
+        </p>
+    }
+</div>
+
+<div class="container d-md-none d-block ps-4">
+    @foreach (var item in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@item.Movie.Poster" class="card-img-top" alt="@item.Movie.Title">
+            <div class="card-body">
+                <h5 class="card-title">@item.Movie.Title</h5>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                <a asp-action="Reserve" asp-route-id="@item.Id" class="btn btn-primary">Reserve Seat</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div class="table-responsive d-none d-md-block">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Movie.Poster)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Movie.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SeatCount)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Movie.Poster" alt="@item.Movie.Title" style="width:100px;height:auto;" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SeatCount)
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="d-grid gap-3">
+                            <a class="btn btn-info mb-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Reserve" asp-route-id="@item.Id" class="btn btn-primary">Reserve Seat</a>
+                            <a class="btn btn-secondary mb-1" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="">
+                            <a class="btn btn-info mb-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Reserve" asp-route-id="@item.Id" class="btn btn-primary">Reserve Seat</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MovieReservationSystem.Models.Movies>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="d-flex flex-row justify-content-between">
+    <h1>Movie List</h1>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a class="btn btn-primary" asp-action="Create">Create New</a>
+        </p>
+    }
+</div>
+
+<div class="container d-md-none d-block ps-4">
+    @foreach (var item in Model)
+    {
+        <div class="card mb-2" style="width: 18rem;">
+            <img src="@item.Poster" class="card-img-top" alt="@item.Title">
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="table-responsive d-none d-md-block">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Poster)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Plot)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Genre)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Poster" alt="@item.Title" style="width:100px;height:auto;" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plot)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Runtime)
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="d-grid gap-3">
+                            <a class="btn btn-info mb-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-secondary mb-1" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
