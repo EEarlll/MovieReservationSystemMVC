@@ -1,4 +1,5 @@
 # Movie Reservation System
+Attempt on [roadmap.sh](https://roadmap.sh/projects/movie-reservation-system)
 
 ## Overview
 The Movie Reservation System is a web application designed to allow users to browse, search, and reserve movie tickets. It provides a comprehensive list of movies, including details such as genre, plot, runtime, and poster images.
@@ -82,7 +83,7 @@ Represents a user role view with properties such as:
 ### Installation
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/MovieReservationSystem.git
+    git clone https://github.com/EEarlll/MovieReservationSystem.git
     ```
 2. Navigate to the project directory:
     ```sh
@@ -101,13 +102,10 @@ Represents a user role view with properties such as:
     dotnet run
     ```
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
 ## Acknowledgements
 - .NET Foundation
 - Bootstrap Authors
 - OpenJS Foundation
 
 ## Contact
-For any inquiries or feedback, please contact [yourname@example.com](mailto:yourname@example.com).
+For any inquiries or feedback, please contact [earleustacio@gmail.com](mailto:earleustacio@gmail.com).
