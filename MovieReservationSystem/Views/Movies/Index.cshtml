@@ -48,7 +48,7 @@
                 </th>
 
                 <th>
-                    @Html.DisplayNameFor(model => model.Runtime)
+                    @Html.DisplayNameFor(model => model.Runtime) Min
                 </th>
                 <th></th>
             </tr>
@@ -70,7 +70,7 @@
                         @Html.DisplayFor(modelItem => item.Genre)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Runtime)
+                        @Html.DisplayFor(modelItem => item.Runtime) Min
                     </td>
                     @if (User.IsInRole("Admin"))
                     {

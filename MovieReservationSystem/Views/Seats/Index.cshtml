@@ -4,69 +4,102 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="d-flex flex-row justify-content-between">
+    <h1>Reserved Seat List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Showtime.Movie.Poster)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Showtime.Movie.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Showtime.StartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Showtime.EndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SeatNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SeatType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+</div>
+
+<div class="container d-md-none d-block ps-4">
+    @foreach (var item in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@item.Showtime.Movie.Poster" class="card-img-top" alt="@item.Showtime.Movie.Title">
+            <div class="card-body">
+                <h5 class="card-title">@item.Showtime.Movie.Title</h5>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
+                else
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div class="table-responsive d-none d-md-block">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    <img src="@item.Showtime.Movie.Poster" alt="@item.Showtime.Movie.Title" style="width:100px;height:auto;" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Showtime.Movie.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Showtime.StartTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Showtime.EndTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SeatNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SeatType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.UserName)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Showtime.Movie.Poster)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Showtime.Movie.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Showtime.StartTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Showtime.EndTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SeatNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SeatType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Showtime.Movie.Poster" alt="@item.Showtime.Movie.Title" style="width:100px;height:auto;" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Showtime.Movie.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Showtime.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Showtime.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SeatNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SeatType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.UserName)
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="d-grid gap-3">
+                            <a class="btn btn-info mb-1" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-secondary mb-1" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

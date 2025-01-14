@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,28 @@ namespace MovieReservationSystem.Controllers {
         }
 
         // GET: Seats
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Index() {
-            var applicationDbContext = _context.Seat.Include(s => s.Showtime)
+            var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) {
+                return Unauthorized();
+            }
+
+            IQueryable<Seat> applicationDbContext = _context.Seat
+                .Include(s => s.Showtime)
                 .ThenInclude(showtime => showtime!.Movie)
-                .Include(s => s.User);
+                .Include(s => s.User)
+                .OrderBy(s => s.Showtime.Movie.Title);
+
+            if (User!.IsInRole("User")) {
+                applicationDbContext = applicationDbContext.Where(s => s.UserId == userId);
+            }
+
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Seats/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id) {
             if (id == null) {
                 return NotFound();
@@ -42,7 +57,8 @@ namespace MovieReservationSystem.Controllers {
         }
 
         // GET: Seats/Create/id
-        public IActionResult Create(int? id) {
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> Create(int? id) {
             if (id == null) {
                 return NotFound();
             }
@@ -54,9 +70,22 @@ namespace MovieReservationSystem.Controllers {
                 return Unauthorized();
             }
 
+            var showtime = await _context.Showtime
+                            .FirstOrDefaultAsync(st => st.Id == id);
+
+            if (showtime == null) {
+                return NotFound();
+            }
+
+            var seats = await _context.Seat
+                .Where(s => s.ShowtimeId == id)
+                .ToListAsync();
+
             ViewData["UserId"] = userId;
 
-            return View();
+            ViewBag.SeatCount = showtime.SeatCount;
+
+            return View(seats);
         }
 
         // POST: Seats/Create
@@ -64,16 +93,35 @@ namespace MovieReservationSystem.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SeatNumber,SeatType,ShowtimeId,UserId")] Seat seat) {
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> Create([Bind("SeatNumber,ShowtimeId,UserId")] Seat seat) {
+            var showtime = await _context.Showtime.FindAsync(seat.ShowtimeId);
+            if (showtime == null) {
+                return NotFound();
+            }
+            if (seat.SeatNumber <= showtime.SeatCount / 3)  // Front seats (Value)
+            {
+                seat.SeatType = "Value";
+            }
+            else if (seat.SeatNumber <= (2 * showtime.SeatCount) / 3)  // Middle seats (Standard)
+            {
+                seat.SeatType = "Standard";
+            }
+            else  // Back seats (Premium)
+            {
+                seat.SeatType = "Premium";
+            }
+
             if (ModelState.IsValid) {
                 _context.Add(seat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(seat);
+            return RedirectToAction("Index");
         }
 
         // GET: Seats/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id) {
             if (id == null) {
                 return NotFound();
@@ -93,6 +141,7 @@ namespace MovieReservationSystem.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,SeatNumber,SeatType,ShowtimeId,UserId")] Seat seat) {
             if (id != seat.Id) {
                 return NotFound();
@@ -119,6 +168,7 @@ namespace MovieReservationSystem.Controllers {
         }
 
         // GET: Seats/Delete/5
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int? id) {
             if (id == null) {
                 return NotFound();
@@ -138,6 +188,7 @@ namespace MovieReservationSystem.Controllers {
         // POST: Seats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteConfirmed(int id) {
             var seat = await _context.Seat.FindAsync(id);
             if (seat != null) {

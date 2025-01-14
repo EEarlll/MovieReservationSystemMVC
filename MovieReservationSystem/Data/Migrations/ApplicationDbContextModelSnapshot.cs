@@ -2544,7 +2544,6 @@ namespace MovieReservationSystem.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SeatType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ShowtimeId")

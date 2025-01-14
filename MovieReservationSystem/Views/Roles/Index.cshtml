@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MovieReservationSystem.Models.ViewRole>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<div class="d-flex flex-row justify-content-between">
+    <h1>User Roles</h1>
+</div>
+
+<div class="table-responsive d-none d-md-block">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Role)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        <form asp-action="PromoteToAdmin" asp-route-id="@item.UserId" method="post">
+                            <button type="submit" class="btn btn-info">Promote</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+

@@ -14,6 +14,13 @@ namespace MovieReservationSystem.Controllers {
         }
 
         public IActionResult Index() {
+            var role = User.Claims
+                .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role)
+                ?.Value;
+
+            ViewBag.UserRole = role;
+            ViewBag.UserName = User.Identity?.Name;
+
             return View();
         }
 

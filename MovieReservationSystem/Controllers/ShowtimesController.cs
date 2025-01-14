@@ -162,7 +162,7 @@ namespace MovieReservationSystem.Controllers {
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Reserve(int? id) {
             var showtime = await _context.Showtime.FindAsync(id);
             if (showtime == null || id == null) {

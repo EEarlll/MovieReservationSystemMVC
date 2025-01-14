@@ -4,7 +4,7 @@ namespace MovieReservationSystem.Models {
     public class Seat {
         public int Id { get; set; }
         public int SeatNumber { get; set; }
-        public required string SeatType { get; set; }
+        public string? SeatType { get; set; }
         public int ShowtimeId { get; set; }
         public Showtime? Showtime { get; set; }
         public required string UserId { get; set; }

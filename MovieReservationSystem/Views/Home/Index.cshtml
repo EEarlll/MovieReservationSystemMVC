@@ -2,7 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5 d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <div class="jumbotron text-center">
+        @if (ViewBag.UserRole != null)
+        {
+            <h1 class="display-4">Hello @ViewBag.UserName - @ViewBag.UserRole</h1>
+        }
+
+        <div class="jumbotron text-center my-auto">
+            <h1 class="display-4">Welcome to Movie Reservation System</h1>
+            <p class="lead">Reserve your favorite movies with ease and convenience.</p>
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="/Movies" role="button">Browse Movies</a>
+        </div>
+    </div>
 </div>

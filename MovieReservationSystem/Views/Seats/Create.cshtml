@@ -1,40 +1,49 @@
-﻿@model MovieReservationSystem.Models.Seat
+﻿@model IEnumerable<MovieReservationSystem.Models.Seat>
+
 
 @{
     ViewData["Title"] = "Create";
 }
+<script src="~/js/site.js" defer></script>
 
-<h1>Create</h1>
 
-<h4>Seat</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SeatNumber" class="control-label"></label>
-                <input asp-for="SeatNumber" class="form-control" />
-                <span asp-validation-for="SeatNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SeatType" class="control-label"></label>
-                <input asp-for="SeatType" class="form-control" />
-                <span asp-validation-for="SeatType" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="ShowtimeId" value="@ViewData["ShowtimeId"]" />
-            <input type="hidden" asp-for="UserId" value="@ViewData["UserId"]" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+<div class="container mt-5">
+    <h1 class="text-center">Movie Seat Reservation</h1>
+    <hr />
+    <div class="screen">SCREEN</div>
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" id="SeatNumber" name="SeatNumber" class="form-control" />
+        <input type="hidden" name="ShowtimeId" value="@ViewData["ShowtimeId"]" />
+        <input type="hidden" name="UserId" value="@ViewData["UserId"]" />
+        <div class="seat-container">
+            @for (int i = 1; i <= ViewBag.SeatCount; i++)
+            {
+                var isBooked = Model.Any(seat => seat.SeatNumber == i);
+                <div class="seat @(isBooked ? "booked" : "")" data-id="@i" onclick="Fill(this)" style="@(isBooked ? "pointer-events: none; opacity: 0.5;" : "")">@i</div>
+            }
+        </div>
+
+        <div class="mt-4">
+            <h3>Booking Summary</h3>
+            <p>Selected Seat: <span id="Selected-Seat"></span></p>
+        </div>
+
+        <div class="text-center mt-4">
+            <input type="submit" value="Book Seat" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
+
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
