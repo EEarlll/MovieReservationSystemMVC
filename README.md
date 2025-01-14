@@ -74,6 +74,19 @@ Represents a user role view with properties such as:
 - Username
 - Role
 
+### Screenshots
+![Home Page](/Screenshots/HomePage.png)
+![Movie List](/Screenshots/Movies.png)
+![Movie Admin](/Screenshots/MovieAdmin.png)
+![Movie Details](/Screenshots/Details.png)
+![Showtime List](/Screenshots/Showtimes.png)
+![Showtime Admin](/Screenshots/ShowtimeAdmin.png)
+![Booking](/Screenshots/Booking.png)
+![Seat List](/Screenshots/SeatsUser.png)
+![Seat Admin](/Screenshots/SeatsAdmin.png)
+![Role Admin](/Screenshots/RolesAdmin.png)
+![Login](/Screenshots/Login.png)
+
 
 ## Getting Started
 ### Prerequisites
